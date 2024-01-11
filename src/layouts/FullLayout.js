@@ -12,8 +12,9 @@ const FullLayout = () => {
   const fetchCtaegory = async () => {
 
     const response = await axios.post(`http://localhost:5000/list/category`);
-    const { Listcategories } = response.data;
-    setaCategory(Listcategories);
+    const  {categories}  = response.data;
+    console.log(categories);
+    setaCategory(categories);
   }
 
   useEffect(() => {
@@ -24,7 +25,7 @@ const FullLayout = () => {
   return (
     <main>
       {/********header**********/}
-      <Header  />
+      <Header listCategory={category} />
       <div className="pageWrapper d-lg-flex">
         {/********Sidebar**********/}
         <aside className="sidebarArea shadow" id="sidebarArea" >

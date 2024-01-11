@@ -1,30 +1,60 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Grid, Typography, List, ListItem, Paper } from '@mui/material';
-import RestaurantMenu from '../../components/restaurantMenu';
+import axios from "axios"
+import { Link } from 'react-router-dom';
+
+
 
 const Plats = () => {
-    // Exemple de données pour les plats
-    const platsData = [
-        { id: 1, nom: 'Plat 1', description: 'Description du plat 1' },
-        { id: 2, nom: 'Plat 2', description: 'Description du plat 2' },
-    ];
+    const [platsData, setPlatData] = useState([]);
+    const [category, setaCategory] = useState([]);
 
+    const fetchPlats = async () => {
+        try {
+            const response = await axios.post(`http://localhost:5000/list/recipes`);
+            const { recipes } = response.data
+            console.log(recipes);
+            setPlatData(recipes);
+
+        } catch (error) {
+            console.error("Error fetching menu:", error.message);
+        }
+
+    },
+        fetchCtaegory = async () => {
+            const response = await axios.post(`http://localhost:5000/list/category`);
+            const { categories } = response.data;
+            setaCategory(categories);
+        };
+
+    useEffect(() => {
+        fetchPlats();
+        fetchCtaegory();
+    }, [])
 
     return (
         <Grid container spacing={1}>
             {/* Section gauche avec la liste des plats */}
             <Grid item xs={12} md={4}>
                 <Paper elevation={3} style={{
-                      padding: '20px',
-                      backgroundColor:'#8952e7ff',
-                      color:'white'
+                    padding: '20px',
+                    backgroundColor: '#8952e7ff',
+                    color: 'white',
+                    minHeight: "200px"
                 }}>
-                    <Typography variant="h2" style={{ fontSize: '1.5rem' }}>
-                        Liste des Plats
-                    </Typography>
                     <List>
-                        {platsData.map((plat) => (
-                            <ListItem key={plat.id}>{plat.nom}</ListItem>
+                        {category.map(({ _id, name }) => (
+                            <div key={_id}>
+                                <Typography variant="h2" style={{ fontSize: '1.5rem' }}>
+                                    -{name}
+                                </Typography>
+                                {platsData
+                                    .filter(({ category }) => category.name === name)
+                                    .map(({ _id, title }) => (
+                                        <ListItem key={_id} ><a style={{textDecoration:'none', color:'white' , fontWeight:'200'  }} href={`/recipe/details/${_id}`} >{title}</a></ListItem>
+                                    ))
+                                }
+                            </div>
                         ))}
                     </List>
                 </Paper>
@@ -35,18 +65,38 @@ const Plats = () => {
                 <Paper elevation={3} style={{
                     padding: '20px',
                     backgroundColor: 'whitesmoke',
-                    color: 'black'
+                    color: 'black',
+                    minHeight: "200px"
                 }}>
                     <Typography variant="h2" style={{ fontSize: '1.5rem' }}>
                         Présentation de Quelques Plats
                     </Typography>
                     <Grid container spacing={2}>
-                        {platsData.slice(0, 2).map((plat) => (
-                            <Grid item key={plat.id} xs={12} >
-                                <Typography variant="h3" style={{ fontSize: '1.2rem' }}>
-                                    {plat.nom}
-                                </Typography>
-                                <Typography style={{ fontSize: '1rem' }}>{plat.description}</Typography>
+                        {platsData.slice(0,6).map(({ _id, title, description,imageUrl}) => (
+                            <Grid item key={_id} xs={6}
+                            sx={{
+                                position: 'relative',
+                                '&:hover::after': {
+                                  content: '"'+ title +'"', // Affiche le nom au survol
+                                  position: 'absolute',
+                                  top: '0',
+                                  left: '0',
+                                  right: '0',
+                                  bottom: '0',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  background: 'rgba(0,0,0,0.7)',
+                                  color: 'white',
+                                  fontSize: '1.5rem',
+                                },
+                                '&:hover img': {
+                                    filter: 'brightness(70%)', // Assombrit l'image au survol
+                                  },
+                            }}
+                            >
+                                <Typography style={{ fontSize: '1rem' }}>{description}</Typography>
+                                <img src={imageUrl} alt={title} style={{ width: '70%', height: 'auto' }} />
                             </Grid>
                         ))}
                     </Grid>

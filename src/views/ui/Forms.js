@@ -27,7 +27,7 @@ const Forms = () => {
           <CardBody>
             <Form>
               <FormGroup>
-                <Label for="exampleEmail">Email</Label>
+                <Label for="exampleEmail">Ingrédients</Label>
                 <Input
                   id="exampleEmail"
                   name="email"

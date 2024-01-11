@@ -15,6 +15,8 @@ import Tables from "../views/ui/Tables";
 import Forms from "../views/ui/Forms";
 import Breadcrumbs from "../views/ui/Breadcrumbs";
 import Plats from "../views/plats/Plats";
+import DetailRecipes from "../views/recette/detailRecipes";
+import UpdateRecipes from "../views/recette/updateRecipe";
 
 /*****Routes******/
 const ThemeRoutes = [
@@ -26,6 +28,8 @@ const ThemeRoutes = [
       { path: "/accueil", exact: true, element: <Viggie /> },
       { path: "/about", exact: true, element: <About /> },
       { path: "/recette", exact: true, element: <RecipeDetails /> },
+      { path: "/recipe/details/:id", exact: true, element: <DetailRecipes /> },
+      { path: "/update/recipes/:id", exact: true, element: <UpdateRecipes /> },
       { path: "/create", exact: true, element: <RecipeForm /> },
       { path: "/plats", exact: true, element: <Plats /> },
       { path: "/cards", exact: true, element: <Cards /> },

@@ -17,9 +17,10 @@ import Logo from "./Logo";
 import { ReactComponent as LogoWhite } from "../assets/images/logos/adminprowhite.svg";
 import user1 from "../assets/images/users/user4.jpg";
 
-const Header = () => {
+const Header = ({ listCategory }) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const [dropdownOpen, setDropdownOpen] = React.useState(false);
+
   const toggle = () => setDropdownOpen((prevState) => !prevState);
   const Handletoggle = () => {
     setIsOpen(!isOpen);
@@ -75,15 +76,15 @@ const Header = () => {
               Acceuil
             </Link>
           </NavItem>
-           <UncontrolledDropdown  inNavbar nav>
+          <UncontrolledDropdown inNavbar nav>
             <DropdownToggle caret nav>
               Plats
             </DropdownToggle>
             <DropdownMenu end>
 
-              {/* {listCategory.map(({_id,name}) => (
+              {listCategory.map(({ _id, name }) => (
                 <DropdownItem key={_id}>{name}</DropdownItem>
-              ))} */}
+              ))}
             </DropdownMenu>
           </UncontrolledDropdown>
           <NavItem>
