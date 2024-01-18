@@ -1,20 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { Box, Grid, IconButton } from '@mui/material';
-import FavoriteIcon from '@mui/icons-material/Favorite';
+import { Box, Grid} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Typography from '@mui/material/Typography';
+import { CardActionArea } from '@mui/material';
 
 const RestaurantMenu = ({ menuImages }) => {
-  const [likedItems, setLikedItems] = useState([]);
   const history = useNavigate();  // Utilisez useHistory pour accéder à l'objet d'historique
-
-  const handleLike = (_id) => {
-    setLikedItems((prevLikedItems) =>
-      prevLikedItems.includes(_id)
-        ? prevLikedItems.filter((item) => item !== _id)
-        : [...prevLikedItems, _id]
-    );
-  };
 
   const handleImageClick = (_id) => {
     history(`/recipe/details/${_id}`);
@@ -23,34 +18,54 @@ const RestaurantMenu = ({ menuImages }) => {
   return (
     <Box>
       <Grid className='wrapper' container spacing={2}>
-        {menuImages.map(({ _id, title, imageUrl }) => (
-          <Grid item xs={12} sm={6} md={4} key={_id}>
-            <div className="menu-item" style={{ position: 'relative' }}>
-              <img
-                src={`${imageUrl}`}
-                alt={title}
-                width={'100%'}
-                className="menu-image"
-                onClick={() => handleImageClick(_id)}  // Ajoutez le gestionnaire d'événements pour l'ID de l'image
-                style={{ cursor: 'pointer' }}  // Ajoutez un style de curseur pour indiquer que l'image est cliquable
-              />
-              <div className="menu-overlay">
-                <p>{title}</p>
-                <IconButton
-                  onClick={() => handleLike(_id)}
-                  color={likedItems.includes(_id) ? 'secondary' : 'default'}
-                  style={{ position: 'absolute', top: '5px', right: '5px' }}
-                >
-                  <FavoriteIcon />
-                </IconButton>
-              </div>
-            </div>
+        {menuImages.map(({ _id, title, imageUrl, description }) => (
+          <Grid item xs={12} sm={6} md={4} key={_id}  >
+            <Card sx={{
+              maxWidth: 345,
+              minHeight: 270,
+            }}
+              onClick={() => handleImageClick(_id)}
+            >
+              <CardActionArea>
+                <CardMedia
+                  component="img"
+                  height="160"
+                  image={`${imageUrl}`}
+                  alt={title}
+                />
+                <CardContent>
+                  <Typography
+                    gutterBottom
+                    variant="h6"
+                    component="div"
+                    sx={{
+                      color: "#673ab7",
+                      fontSize:'800'
+                    }}
+                  >
+                    {title}
+                  </Typography>
+                  <Typography variant="body2"
+                    color="text.secondary"
+                    sx={{
+                      maxWidth: '800px',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap'
+                    }}
+                  >
+                    {description}
+                  </Typography>
+                </CardContent>
+              </CardActionArea>
+            </Card>
           </Grid>
         ))}
       </Grid>
     </Box>
   );
 };
+
 
 RestaurantMenu.propTypes = {
   menuImages: PropTypes.arrayOf(

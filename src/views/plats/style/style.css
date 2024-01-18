@@ -1,0 +1,25 @@
+
+.image-box{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+padding: 20px;}
+
+.image-container{
+margin-top: 10PX;
+}
+.items{
+    contain: 'dfdfdfd';
+
+}
+.platsItem{
+    text-decoration: none;
+    color: whitesmoke;
+    font-size: 600;
+}
+
+.platsItem:hover{
+    color: blue;
+    text-decoration:underline;
+}

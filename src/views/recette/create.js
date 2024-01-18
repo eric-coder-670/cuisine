@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Formik, Field, Form, ErrorMessage, FieldArray } from 'formik';
+import { Formik, Form, ErrorMessage, FieldArray } from 'formik';
 import * as Yup from 'yup';
 import '../recette/style/style.css'
 import axios from 'axios'
@@ -15,17 +15,7 @@ import RecipesService from '../../services/recipesServices';
 const RecipeForm = () => {
   const API_URL = 'http://localhost:5000';
   const [categorys, setaCategorys] = useState([]);
-  const [initialValues, setInitialValues] = useState({
-    title: '',
-    ingredients: [''],
-    instructions: '',
-    description: '',
-    level: 0,
-    number_personne:0,
-    imageUrl: '',
-    videoUrl: '',
-    category: '',
-  });
+  const [form, setForm] = useState({});
   const [next, setNext] = useState(0);
   const { id } = useParams();
 
@@ -44,6 +34,7 @@ const RecipeForm = () => {
     const { categories } = response.data;
     setaCategorys(categories);
   }
+  
   const fetchRecipeData = async () => {
     try {
       const response = await axios.post(`${API_URL}/list/recipes`);
@@ -51,7 +42,7 @@ const RecipeForm = () => {
       const filteredData = recipes.filter(({ _id }) => _id === id);
 
       if (filteredData.length > 0) {
-        return filteredData[0]; // Retournez le premier élément du tableau
+        setForm(filteredData[0])
       } else {
         return null; // Aucune correspondance trouvée, retournez null ou une valeur par défaut
       }
@@ -60,31 +51,25 @@ const RecipeForm = () => {
       return null;
     }
   };
-
-  useEffect(() => {
+ console.log('form',form);
+  
+  useEffect(  () => {
     fetchCtaegory();
-    const fetchData = async () => {
-      const recipeData = await fetchRecipeData();
-      console.log('recipe data', recipeData);
-      if (recipeData) {
-        setInitialValues({
-          title: recipeData.title || '',
-          ingredients: recipeData.ingredients || [''],
-          instructions: recipeData.instructions || '',
-          description: recipeData.description || '',
-          level: recipeData.level || 0,
-          number_personne: recipeData.number_personne || 0,
-          imageUrl: recipeData.imageUrl || '',
-          videoUrl: '',
-          category: recipeData.category || '',
-        });
-      }
-    };
-
-    fetchData();
+    fetchRecipeData();
   }, []);
 
-  console.log(initialValues);
+  const initialValues = {
+    title: form.title || '',
+    ingredients: form.ingredients || [''],
+    instructions: form.instructions || '',
+    description: form.description || '',
+    level: form.level || 0,
+    number_personne: form.number_personne || 0,
+    imageUrl: form.imageUrl || '',
+    videoUrl: form.videoUrl||'',
+    category: form.category || '',
+  }
+
 
   const validationSchema = Yup.object().shape({
     title: Yup.string().required('Le titre est requis'),
@@ -100,21 +85,24 @@ const RecipeForm = () => {
     category: Yup.string().required('La catégorie est requise'),
   });
 
-  const onSubmit = async (values) => {
-    RecipesService.addRecipes(values)
+  const onSubmit = async (values,{resetForm}) => {
+    console.log(values.title);
+    // RecipesService.addRecipes(values);
+    // setNext(0);
+    // resetForm(values);
   };
 
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={async (values, { resetForm }) => {
-        await onSubmit(values);
-        resetForm(values);
-      }}
+      onSubmit={
+        onSubmit
+       
+      }
     >
-      {({ values, /* other props */ }) => (
-        <Form >
+      {(formik) => (
+        <form onClick={formik.handleSubmit} >
           <Card>
             <CardBody>
               {next === 2 && (
@@ -125,12 +113,13 @@ const RecipeForm = () => {
                         <label style={{ marginBottom: '10px' }}>
                           Ingrédients <span className="require">*</span>
                         </label>
-                        {values.ingredients.map((ingredient, index) => (
+                        {formik.values.ingredients.map((ingredient, index) => (
                           <div key={index} className="form-group" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <Field
+                            <input
                               type="text"
                               name={`ingredients[${index}]`}
                               className="form-control"
+                               value={ingredient}
                             />
                             <div style={{ marginLeft: '5px', marginRight: '5px' }}>
                               <Button onClick={() => remove(index)}>Supprimer</Button>
@@ -150,79 +139,105 @@ const RecipeForm = () => {
                   <div>
                     <div className="form-group">
                       <label htmlFor="title">Titre <span className="require" >*</span></label>
-                      <Field type="text" name="title" className="form-control"
-
+                      <input
+                      id='title'
+                        type="text"
+                        name="title"
+                        className="form-control"
+                        {...formik.getFieldProps("title")}
                       />
                       <ErrorMessage name="title" component="div" className="error-message" />
                     </div>
+
                     <div className="form-group">
                       <label htmlFor="instructions">Instructions <span className="require">*</span></label>
-                      <Field
-                        as="textarea"
+                      <textarea
+                      id='instructions'
                         name="instructions"
                         className="form-control"
                         rows={6}  // Nombre de lignes pour augmenter la taille
                         style={{ minHeight: '250px' }}  // Hauteur minimale en pixels
+                        {...formik.getFieldProps("instructions")}
                       />
                       <ErrorMessage name="instructions" component="div" className="error-message" />
                     </div>
 
                     <div className="form-group">
                       <label htmlFor="description">Description</label>
-                      <Field as="textarea"
+                      <textarea
+                      id='description'
                         name="description"
                         className="form-control"
+                        {...formik.getFieldProps("description")}
                       />
                       <ErrorMessage name="description" component="div" className="error-message" />
                     </div>
-                  </div>}
+                  </div>
+                }
 
                 {next === 1 &&
                   <div>
                     <div className="form-group">
                       <label htmlFor="level">Niveau</label>
-                      <Field type="number"
+                      <input
+                      id='level'
+                        type="number"
                         name="level"
                         className="form-control"
+                        {...formik.getFieldProps("level")}
                       />
                       <ErrorMessage name="level" component="div" className="error-message" />
                     </div>
 
                     <div className="form-group">
                       <label htmlFor="number_personne">Nombre de personnes</label>
-                      <Field type="number" name="number_personne" className="form-control" />
+                      <input
+                      id='number'
+                        type="number"
+                        name="number_personne"
+                        className="form-control"
+                        {...formik.getFieldProps("number_personne")}
+                      />
                       <ErrorMessage name="number_personne" component="div" className="error-message" />
                     </div>
 
                     <div className="form-group">
                       <label htmlFor="imageUrl">URL de l'image</label>
-                      <Field type="url"
+                      <input
+                        type="url"
+                        id='imageUrl'
                         name="imageUrl"
                         className="form-control"
+                        {...formik.getFieldProps("imageUrl")}
                       />
                       <ErrorMessage name="imageUrl" component="div" className="error-message" />
                     </div>
 
                     <div className="form-group">
-
                       <label htmlFor="videoUrl">URL de la vidéo</label>
-                      <Field type="url" name="videoUrl" className="form-control" />
+                      <input
+                        type="url"
+                        id='videoUrl'
+                        name="videoUrl"
+                        className="form-control"
+                        {...formik.getFieldProps("videoUrl")}
+                      />
                       <ErrorMessage name="videoUrl" component="div" className="error-message" />
                     </div>
 
                     <div className="form-group">
                       <label htmlFor="category">Catégorie de recette <span className="require" >*</span></label>
-                      <Field
-                        as="select"
+                      <select
                         id="category"
                         name="category"
                         className="form-control"
+                        {...formik.getFieldProps("category")}
                       >
                         <option value="" disabled>Sélectionnez une catégorie</option>
                         {categorys.map(({ _id, name }) => (
                           <option key={_id} value={_id}>{name}</option>
                         ))}
-                      </Field>
+                      </select>
                       <ErrorMessage name="category" component="div" className="error-message" />
                     </div>
                   </div>
@@ -264,7 +279,7 @@ const RecipeForm = () => {
               </div>
             </div>
           </Card>
-        </Form>
+        </form>
       )}
     </Formik>
   );

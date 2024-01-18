@@ -2,48 +2,29 @@ import { Button, Nav, NavItem } from "reactstrap";
 import { Link, useLocation } from "react-router-dom";
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
+import AddIcon from '@mui/icons-material/Add';
+import InfoIcon from '@mui/icons-material/Info';
 
 const navigation = [
   {
     title: "Accueil",
     href: "/accueil",
-    // icon: <Dashboard />,
-  },
-  {
-    title: "recipes",
-    href: "/recette",
-  },
-  {
-    title: "Create recipes",
-    href: "/create",
+   icon: <MenuBookIcon />,
   },
   {
     title: "Plats",
     href: "/plats",
+    icon: <RestaurantMenuIcon />,
   },
   {
-    title: "Cards",
-    href: "/cards",
-  },
-  {
-    title: "Grid",
-    href: "/grid",
-  },
-  {
-    title: "Table",
-    href: "/table",
-  },
-  {
-    title: "Forms",
-    href: "/forms",
-  },
-  {
-    title: "Breadcrumbs",
-    href: "/breadcrumbs",
+    title: "Create recipes",
+    href: "/create",
+    icon: <AddIcon />,
   },
   {
     title: "About",
     href: "/about",
+    icon: <InfoIcon />,
   },
 ];
 
@@ -55,7 +36,7 @@ const Sidebar = () => {
 
   return (
     <div className="bg-dark"
- 
+
     >
       <div className="d-flex">
         <Button
@@ -79,7 +60,7 @@ const Sidebar = () => {
                 }
               >
                 {navi.icon}
-                <span className="ms-3 d-inline-block">{navi.title}</span>
+                <span className="ms-3 d-inline-block" style={{ color: 'white' }}>{navi.title}</span>
               </Link>
             </NavItem>
           ))}

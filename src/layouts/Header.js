@@ -83,7 +83,11 @@ const Header = ({ listCategory }) => {
             <DropdownMenu end>
 
               {listCategory.map(({ _id, name }) => (
-                <DropdownItem key={_id}>{name}</DropdownItem>
+                <DropdownItem key={_id}>  
+                 <Link to={`/details/list/${name}`} className="nav-link">
+                 {name}
+              </Link> 
+              </DropdownItem>
               ))}
             </DropdownMenu>
           </UncontrolledDropdown>

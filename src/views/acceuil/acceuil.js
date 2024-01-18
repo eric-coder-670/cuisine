@@ -5,13 +5,11 @@ import axios from "axios"
 
 const Menu = () => {
   const [menu, setMenu] = useState([]);
-  const apiKey = 'c52bff4eb082421eab6ce3aab455ab3e'; // Use environment variable for API key
-  const apiUrl = `https://api.spoonacular.com/recipes/random?apiKey=${apiKey}&number=8`;
 
   const fetchMenu = async () => {
     try {
       //uncomment
-      const response = await axios.post(`http://localhost:5000/list/recipes?limit`);
+      const response = await axios.post(`http://localhost:5000/list/recipes?limit=9 `);
       const { recipes } = response.data
       console.log(recipes);
       setMenu(recipes);
@@ -23,8 +21,6 @@ const Menu = () => {
   useEffect(() => {
     fetchMenu();
   }, []);
-
-
 
   return (
     <div>
