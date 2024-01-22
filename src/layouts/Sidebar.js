@@ -35,9 +35,7 @@ const Sidebar = () => {
   let location = useLocation();
 
   return (
-    <div className="bg-dark"
-
-    >
+    <div className="bg-dark">
       <div className="d-flex">
         <Button
           color="white"
@@ -47,6 +45,7 @@ const Sidebar = () => {
           <i className="bi bi-x"></i>
         </Button>
       </div>
+      
       <div className="p-3 mt-2">
         <Nav vertical className="sidebarNav">
           {navigation.map((navi, index) => (

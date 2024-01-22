@@ -14,8 +14,9 @@ import { useParams } from 'react-router-dom';
 
 function ListPlats() {
     const [platsDetails, setPlatsDetails] = useState([]);
-    const itemsPerPage = 3;
     const [currentPage, setCurrentPage] = useState(1);
+     const [error, setError] = useState(null); // Nouvel état pour suivre les erreurs
+    const itemsPerPage = 3;
     const { id } = useParams();
 
 
@@ -34,8 +35,10 @@ function ListPlats() {
             }));
 
             setPlatsDetails(recipeDetails);
+            setError(null); // Réinitialiser l'erreur en cas de succès
         } catch (error) {
             console.error("Error fetching menu:", error.message);
+            setError("Une erreur est survenue lors du chargement des recettes. Veuillez réessayer plus tard.");
         }
     };
 
@@ -94,7 +97,7 @@ function ListPlats() {
                                 ))}
                             </Slider>
                         </div>}
-                        <div style={{ background: '#45343D', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <div style={{ background: '#8952e7ff', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                             <Typography variant='h5'>
                                 {id}
                             </Typography>
@@ -102,7 +105,7 @@ function ListPlats() {
                     </Paper>
                 </Grid>
 
-                {displayedPlats.length>0? <div>
+                {displayedPlats.length>0? <>
                    { displayedPlats.map((plat, index) => (
                     <Grid item xs={12} sm={6} md={4} key={index} >
                         <Card>
@@ -178,7 +181,7 @@ function ListPlats() {
                         style={{ marginTop: '20px' }}
                     />
                 </Grid>
-                </div>
+                </>
                 :<Grid item   md={12}  >
                      <Box
                      sx={{

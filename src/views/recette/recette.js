@@ -37,7 +37,7 @@ const RecipeDetails = (props) => {
     const { _id, title, imageUrl, ingredients, instructions, description, level } = recipeData;
 
     const updateRecipes = (_id) => {
-       history(`/update/recipes/${_id}`)
+        history(`/update/recipes/${_id}`)
     };
     // const etapes = instructions.split(/Etape \d+/).filter((etape) => etape.trim() !== '');
     // console.log(etapes);

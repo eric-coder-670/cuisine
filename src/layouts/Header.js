@@ -43,6 +43,7 @@ const Header = ({ listCategory }) => {
         <div className="d-lg-block d-none me-5 pe-3">
           <Logo />
         </div>
+
         <NavbarBrand href="/">
           <LogoWhite className="d-lg-none" />
         </NavbarBrand>
@@ -54,6 +55,7 @@ const Header = ({ listCategory }) => {
           <i className="bi bi-list"></i>
         </Button>
       </div>
+      
       <div className="hstack gap-2">
         <Button
           color="primary"
@@ -76,12 +78,13 @@ const Header = ({ listCategory }) => {
               Acceuil
             </Link>
           </NavItem>
+
           <UncontrolledDropdown inNavbar nav>
             <DropdownToggle caret nav>
               Plats
             </DropdownToggle>
+            
             <DropdownMenu end>
-
               {listCategory.map(({ _id, name }) => (
                 <DropdownItem key={_id}>  
                  <Link to={`/details/list/${name}`} className="nav-link">
@@ -91,12 +94,14 @@ const Header = ({ listCategory }) => {
               ))}
             </DropdownMenu>
           </UncontrolledDropdown>
+
           <NavItem>
             <Link to="/about" className="nav-link">
               About
             </Link>
           </NavItem>
         </Nav>
+
         <Dropdown isOpen={dropdownOpen} toggle={toggle}>
           <DropdownToggle color="transparent">
             <img
@@ -106,6 +111,7 @@ const Header = ({ listCategory }) => {
               width="30"
             ></img>
           </DropdownToggle>
+
           <DropdownMenu>
             <DropdownItem header>Info</DropdownItem>
             <DropdownItem>My Account</DropdownItem>
